@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import ru.gb.dao.ProductImageDao;
+import ru.gb.exceptions.ProductImageNotFoundException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -25,8 +26,7 @@ public class ProductImageService {
             return ImageIO.read(image.getFile());
         } else {
             log.error("Image with name {} not found!", imageName);
-            // todo ДЗ - сделать наслденика FileNotFoundException -> ProductImageNotFoundException
-            throw new FileNotFoundException("File " + imageName + " not found");
+            throw new ProductImageNotFoundException("File " + imageName + " not found");
         }
     }
 }

@@ -15,12 +15,12 @@ public class GbShopWinterApplication {
         SpringApplication.run(GbShopWinterApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner bootstrap(CategoryService categoryService, ManufacturerService manufacturerService) {
-        return (args) -> {
-            // todo ДЗ сохранить категорию
-            // todo ДЗ сохранить производителя
-            // todo потом закомментировать этот блок
-        };
-    }
+//    @Bean
+//    public CommandLineRunner bootstrap(CategoryService categoryService, ManufacturerService manufacturerService) {
+//        return (args) -> {
+//            // todo ДЗ сохранить категорию
+//            // todo ДЗ сохранить производителя
+//            // todo потом закомментировать этот блок
+//        };
+//    }
 }

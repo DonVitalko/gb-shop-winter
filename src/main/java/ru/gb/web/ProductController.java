@@ -12,6 +12,7 @@ import ru.gb.dao.ProductImageDao;
 import ru.gb.dao.security.AccountUserDao;
 import ru.gb.entity.Product;
 import ru.gb.entity.security.AccountUser;
+import ru.gb.exceptions.ProductImageNotFoundException;
 import ru.gb.service.CategoryService;
 import ru.gb.service.ManufacturerService;
 import ru.gb.service.ProductImageService;
@@ -34,7 +35,7 @@ public class ProductController {
     private final ProductImageService productImageService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasAuthority('product.read') || isAnonymous()")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getProductList(Model model) {
         model.addAttribute("products", productService.findAll());
         return "product/product-list";
@@ -90,8 +91,8 @@ public class ProductController {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(productImageService.loadFileAsResource(id), "png", byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
-            throw e; // todo ДЗ - заменить на ProductImageNotFoundException
+        } catch (ProductImageNotFoundException e) {
+            throw e;
         }
     }
 
