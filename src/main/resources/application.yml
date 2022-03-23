@@ -1,5 +1,8 @@
 server:
   port: 8080
+  error:
+    include-exception: true
+    include-stacktrace: always
 #  servlet:
 #    context-path: '/internal'
 spring:
@@ -9,8 +12,24 @@ spring:
     import: optional:configserver:${SPRING_CLOUD_CONFIG_URI:http://127.0.0.1:8888}
   cloud:
     config:
-      label: ${SPRING_CLOUD_CONFIG_LABEL:master}
+      label: ${SPRING_CLOUD_CONFIG_LABEL:develop}
       username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
       password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
   zipkin:
     enabled: false
+
+  mail:
+    host: 'smtp.gmail.com'
+    port: 587
+    username: 'geek'
+    password: 'geek'
+    properties:
+      mail:
+        smtp:
+          auth: 'true'
+          starttls:
+            enable: 'true'
+
+jwt:
+  token:
+    expired: 1800000
