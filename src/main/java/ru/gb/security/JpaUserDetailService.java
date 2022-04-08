@@ -1,3 +1,13 @@
+package ru.gb.security;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.gb.api.security.dto.UserDto;
 import ru.gb.dao.security.AccountRoleDao;
 import ru.gb.dao.security.AccountUserDao;
@@ -6,9 +16,11 @@ import ru.gb.entity.security.AccountStatus;
 import ru.gb.entity.security.AccountUser;
 import ru.gb.service.UserService;
 import ru.gb.web.dto.mapper.UserMapper;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service

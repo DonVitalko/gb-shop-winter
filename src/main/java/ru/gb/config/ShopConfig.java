@@ -43,7 +43,11 @@ public class ShopConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
 
     @Bean
-    SecretGenerator secretGenerator() {return new DefaultSecretGenerator(); }
+    SecretGenerator secretGenerator() {
+        return new DefaultSecretGenerator();
+    }
+}
+
+
