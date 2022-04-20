@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProductService {
+public class ProductService implements ProductServiceInterface{
     private final ProductDao productDao;
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
