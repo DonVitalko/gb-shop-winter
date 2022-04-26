@@ -14,6 +14,7 @@ import ru.gb.api.product.dto.ProductDto;
 import ru.gb.dao.CategoryDao;
 import ru.gb.dao.ManufacturerDao;
 import ru.gb.dao.ProductDao;
+import ru.gb.dao.identitymap.product.ProductIdentityMap;
 import ru.gb.entity.Product;
 import ru.gb.web.dto.ProductManufacturerDto;
 import ru.gb.web.dto.mapper.ProductMapper;
@@ -25,11 +26,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProductService {
+public class ProductService implements ProductServiceInterface{
     private final ProductDao productDao;
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
     private final ProductMapper productMapper;
+    private final ProductIdentityMap productIdentityMap;
 
     @Transactional(propagation = Propagation.NEVER, isolation = Isolation.DEFAULT)
     public long count() {
@@ -51,7 +53,14 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
-        return productMapper.toProductDto(productDao.findById(id).orElse(null));
+        ProductDto productDto = productIdentityMap.getProduct(id);
+
+        if (productDto == null) {
+            productDto = productMapper.toProductDto(productDao.findById(id).orElse(null));
+            productIdentityMap.addProduct(productDto);
+        }
+
+        return productDto;
     }
 
 
@@ -65,6 +74,7 @@ public class ProductService {
 
     public void deleteById(Long id) {
         try {
+            productIdentityMap.remove(id);
             productDao.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             log.error(e.getMessage());
@@ -72,11 +82,17 @@ public class ProductService {
     }
 
     public void disable(Long id) {
-        Optional<Product> product = productDao.findById(id);
-        product.ifPresent(p -> {
-            p.setStatus(Status.DISABLED);
-            productDao.save(p);
-        });
+        ProductDto productDto = productIdentityMap.getProduct(id);
+        Product product;
+        if (productDto == null){
+            product = productDao.findById(id).orElse(null);
+        } else {
+            product = productMapper.toProduct(productDto, manufacturerDao, categoryDao);
+        }
+        if (product != null){
+            product.setStatus(Status.DISABLED);
+            productDao.save(product);
+        }
     }
 
     public List<Product> findAll(int page, int size) {
